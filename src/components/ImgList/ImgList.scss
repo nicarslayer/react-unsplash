@@ -1,0 +1,12 @@
+.Img-list{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 50px -10px;
+    @media only screen and (max-width : 1200px) {
+        width: calc(100% + 30px);
+    }
+    @media only screen and (max-width : 768px) {
+        width: calc(100% + 10px);
+        margin: 30px -5px;
+    }
+}

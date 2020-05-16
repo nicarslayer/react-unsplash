@@ -1,0 +1,30 @@
+.Button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(50% - 5px);
+    margin: 0 10px 0 0;
+    padding: 14px 20px;
+    border: 1px solid #2d2d2d;
+    transition: 0.2s;
+    &:last-of-type{
+        margin: 0;
+    }
+    &.primary{
+        color: #fff;
+        background-color: #2d2d2d;
+    }
+    &.secondary{
+        color: #2d2d2d;
+    }
+    &:hover{
+        background-color: #fff;
+        border: 1px solid #fff;
+        color: #2d2d2d;
+    }
+    &:disabled{
+        pointer-events: none;
+        cursor: default;
+        opacity: 0.6;
+    }
+}

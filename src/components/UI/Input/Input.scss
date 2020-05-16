@@ -1,0 +1,9 @@
+.Input{
+    width: 100%;
+    background-color: rgba(#eee, 0.8);
+    padding: 12px 20px;
+    transition: 0.2s;
+    &:focus{
+        background-color: #fff;
+    }
+}
