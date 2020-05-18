@@ -5,7 +5,7 @@
         width: 60%;
     }
     p{
-        font-size: 35px;
+        font-size: calc(20px + (15 + 15 * 0.7) * ((100vw - 320px) / 1180));
         letter-spacing: 1px;
     }
 }

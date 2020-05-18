@@ -1,6 +1,6 @@
 .wrap{
     width: 1200px;
-    margin: 50px auto;
+    margin: 50px auto 0;
     min-height: 101vh;
 	padding: 0 20px;
 	@media only screen and (max-width : 1200px) {
@@ -11,6 +11,8 @@
     }
     @media only screen and (max-width : 768px) {
         width: 100%;
+        padding: 0 10px;
+        margin: 30px 0 0 0;
     }
 
     .search-form{
@@ -30,7 +32,7 @@
         @media only screen and (max-width : 768px) {
             position: relative;
         }
-        &__input-container{
+        .input-container{
             width: 65%;
             padding: 0 20px 0 0;
             @media only screen and (max-width : 768px) {
@@ -38,7 +40,7 @@
                 padding: 0 0 20px 0;
             }
         }
-        &__buttons-group{
+        .buttons-group{
             width: 35%;
             @media only screen and (max-width : 768px) {
                 width: 100%;
@@ -61,15 +63,13 @@
             width: calc(35% + 5px);
             padding: 0 20px 0 0;
             margin: 60px 0 0 -5px;
+            @media only screen and (max-width : 1200px) {
+                display: none;
+            }
             .saved-queries{
-                position: sticky;
-                top: 160px;
                 border: 1px solid #2d2d2d;
                 padding: 20px;
                 border-radius: 5px;
-                @media only screen and (max-width : 1200px) {
-                    display: none;
-                }
                 span{
                     display: block;
                     text-align: right;

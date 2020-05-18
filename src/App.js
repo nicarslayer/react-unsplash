@@ -12,29 +12,30 @@ export default class App extends Component {
 
   state = {
     images: [],
-    loading: false,
-    defaultBlock: true,
-    pages: null,
+    loadingBlockVisibility: false,
+    defaultBlockVisibility: true,
+    totalNumberOfPages: null,
     currentPage: 1,
-    disabled: true
+    searchBtnDisabled: true,
+    paginationBtnDisabled: false,
   }
 
-  handleChange = (event) => {
+  searchInputHandler = (event) => {
     if( event.target.value.trim() !== '' ){      
       this.setState({
         request: event.target.value,
         currentPage: 1,
-        disabled: false
+        searchBtnDisabled: false
       }) 
     } else {
       this.setState({
-        disabled: true
+        searchBtnDisabled: true
       }) 
     }
        
   }
 
-  handleSubmit = (event) => {
+  searchHandler = (event) => {
 
     const currentPage = this.state.currentPage
     const images = []
@@ -54,35 +55,44 @@ export default class App extends Component {
       window.scrollTo(0, 0)
 
       this.setState({
-        images, loading : false, defaultBlock: false, pages: response.data.total_pages
+        images, loadingBlockVisibility : false, defaultBlockVisibility: false, totalNumberOfPages: response.data.total_pages
       }); 
       
       
     });
     
     this.setState({
-      loading : true
+      loadingBlockVisibility : true
     });
     
     event.preventDefault()
 
   }
 
-  pageHandler = (event) => {
+  paginationHandler = (event) => {
 
     if( isNaN(event.target.value) ){
       event.target.value = ''
+      this.setState({
+        paginationBtnDisabled: true,
+      })
+    } else if( event.target.value === ''){
+      this.setState({
+        paginationBtnDisabled: true,
+      })
     } else {
 
       const inputVal = +event.target.value
-      const maxValue = this.state.pages
+      const maxValue = this.state.totalNumberOfPages
 
       if(inputVal > maxValue){
         event.target.value = maxValue
       }
 
       this.setState({
-        currentPage: event.target.value
+        currentPage: event.target.value,
+        paginationBtnDisabled: false,
+
       })   
 
     }
@@ -96,15 +106,15 @@ export default class App extends Component {
       <div  className="wrap">
 
         <form className="search-form">
-          <div className="search-form__input-container">
+          <div className="input-container">
             <Input 
               type="text" 
               placeholder="Search free high-resolution photos"
-              onChange={this.handleChange} 
+              onChange={this.searchInputHandler} 
             />
           </div>
-          <div className="search-form__buttons-group">
-            <Button type="primary" onClick={this.handleSubmit} disabled={this.state.disabled}>Search</Button>
+          <div className="buttons-group">
+            <Button type="primary" onClick={this.searchHandler} disabled={this.state.searchBtnDisabled}>Search</Button>
             <Button type="secondary" disabled>Save</Button>
           </div>
         </form>
@@ -113,11 +123,11 @@ export default class App extends Component {
         <div className="row">
           <div className="content-box">
             {
-              this.state.defaultBlock
+              this.state.defaultBlockVisibility
               ? 
                 <DefaultBlock />
               : 
-                this.state.loading
+                this.state.loadingBlockVisibility
                 ? 
                   <Loader />
                 : 
@@ -126,10 +136,11 @@ export default class App extends Component {
                       images={this.state.images}
                     />
                     <Pagination 
-                      pages={this.state.pages} 
+                      pages={this.state.totalNumberOfPages} 
+                      disabled={this.state.paginationBtnDisabled}
                       currentPage={this.state.currentPage} 
-                      onChange={this.pageHandler} 
-                      onClick={this.handleSubmit}
+                      onChange={this.paginationHandler} 
+                      onClick={this.searchHandler}
                     />
                   </React.Fragment>
                 

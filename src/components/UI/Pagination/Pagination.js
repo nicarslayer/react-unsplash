@@ -11,8 +11,8 @@ const Pagination = props => {
             <div className="Pagination">
                 <span>Page</span>    
                 <form>
-                    <Input type="text" defaultValue={props.currentPage} onChange={props.onChange} onKeyPress={props.onKeyPress}/>
-                    <Button type="primary" onClick={props.onClick}>
+                    <Input type="text" defaultValue={props.currentPage} onChange={props.onChange} onKeyPress={props.onKeyPress}  />
+                    <Button type="primary" onClick={props.onClick} disabled={props.disabled}>
                         Go
                     </Button>
                 </form>
