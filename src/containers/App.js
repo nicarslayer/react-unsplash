@@ -39,9 +39,10 @@ export default class App extends Component {
 
     const currentPage = this.state.currentPage
     const images = []
-    const request = this.state.request    
+    const request = this.state.request  
+    const clientId = '&client_id=T47LHJDjEujXoOF7KrTXcP9CLns2zW3BARnsoMA4fDs'  
 
-    axios.get('https://api.unsplash.com/search/photos?per_page=30&page='+currentPage+'&query='+request+'&client_id=T47LHJDjEujXoOF7KrTXcP9CLns2zW3BARnsoMA4fDs')
+    axios.get('https://api.unsplash.com/search/photos?per_page=30&page='+currentPage+'&query='+request+clientId)
     .then(response => {
            
       Object.keys(response.data.results).forEach((key, index) => {

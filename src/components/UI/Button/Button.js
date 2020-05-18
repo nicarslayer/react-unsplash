@@ -1,17 +1,13 @@
 import React from 'react' 
 import './Button.scss'
+import clsx from 'clsx';
 
 const Button = props => {
-
-    const cls = [
-        "Button",
-        [props.type]
-    ]
 
     return(
         <button
             onClick={props.onClick}
-            className={cls.join(' ')}
+            className={clsx('Button', [props.type])}
             disabled={props.disabled}
         >
             {props.children}
