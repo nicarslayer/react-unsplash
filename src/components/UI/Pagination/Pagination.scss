@@ -1,47 +1,49 @@
-.Pagination{
-    width: 100%;
+@import "../../../styles/vars.scss";
+
+.Pagination {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid $black-color;
+  padding: 30px 0;
+  margin: 80px 0;
+  form {
+    width: 100px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    border-top: 1px solid #2d2d2d;
-    padding: 30px 0;
-    margin: 80px 0;
-    form{
-        width: 100px;
-        display: flex;
-        align-items: center;
-        border: 1px solid #2d2d2d;
-        margin: 0 20px 0 5px;
-        input{
-            width: 55px;
-            height: 40px;
-            padding: 0 10px;
-            text-align: center;
-            background: #fff;
-        }
-        button{
-            width: 45px;
-            height: 40px;
-            margin: 0;
-            padding: 0;
-            font-size: 16px;
-            font-weight: bold;
-            &:hover{
-                background: #eee;
-                border: 1px solid #eee;
-                border-left: 1px solid #2d2d2d;
-            }
-        }
+    border: 1px solid $black-color;
+    margin: 0 20px 0 5px;
+    input {
+      width: 55px;
+      height: 40px;
+      padding: 0 10px;
+      text-align: center;
+      background: $white-color;
     }
-    span{
-        margin: 0 10px 0 0;
-        color: rgba(#000, 0.4);
-        font-weight: bold;
-        font-size: 14px;
+    button {
+      width: 45px;
+      height: 40px;
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      font-weight: bold;
+      &:hover {
+        background: $gray-color;
+        border: 1px solid $gray-color;
+        border-left: 1px solid $black-color;
+      }
     }
-    .total-pages{
-        display: flex;
-        align-items: center;
-    }
+  }
+  span {
+    margin: 0 10px 0 0;
+    color: rgba($black-color, 0.4);
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .total-pages {
+    display: flex;
+    align-items: center;
+  }
 }
