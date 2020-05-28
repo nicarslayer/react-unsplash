@@ -7,7 +7,7 @@ const HistoryItem = (props) =>
     .slice(0)
     .reverse()
     .map((query, index) => (
-      <ListItem button key={index} onClick={props.onClick}>
+      <ListItem button key={index} onClick={props.onClick} className="ListItem">
         <ListItemText primary={query.title}></ListItemText>
       </ListItem>
     ));

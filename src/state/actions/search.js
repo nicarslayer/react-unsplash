@@ -109,17 +109,11 @@ export function saveQuery() {
       for (let i = 0; i < queryArray.length; i += 1) {
         if (queryArray[i].title === currentQuery[0].title) {
           queryArray.splice(i, 1);
-          const newQueryArray = queryArray.concat(currentQuery);
-          dispatch(addSavedQuery(newQueryArray));
-        } else {
-          const newQueryArray = queryArray.concat(currentQuery);
-          dispatch(addSavedQuery(newQueryArray));
         }
       }
-    } else {
-      const newQueryArray = queryArray.concat(currentQuery);
-      dispatch(addSavedQuery(newQueryArray));
     }
+    dispatch(addSavedQuery(queryArray.concat(currentQuery)));
+
     localStorage.setItem('initialState', JSON.stringify(getState().queryArray));
   };
 }
@@ -177,5 +171,19 @@ export function fetchLocalStorage(storage) {
   return {
     type: FETCH_LOCAL_STORAGE,
     storage,
+  };
+}
+
+export function fetchHistoryBlockVisibility() {
+  return (dispatch, getState) => {
+    const historyBlockVisibility = !getState().historyBlockVisibility;
+    dispatch(toggleHistoryBlockVisibility(historyBlockVisibility));
+  };
+}
+
+export function toggleHistoryBlockVisibility(state) {
+  return {
+    type: 'TOGGLE_HISTORY_BLOCK_VISIBILITY',
+    state,
   };
 }

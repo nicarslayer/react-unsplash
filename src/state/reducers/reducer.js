@@ -9,6 +9,7 @@ import {
   SHOW_EMPTY_BLOCK,
   RESET_SAVED_QUERIES,
   FETCH_LOCAL_STORAGE,
+  TOGGLE_HISTORY_BLOCK_VISIBILITY,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   loadingBlockVisibility: false,
   defaultBlockVisibility: true,
   emptyBlockVisibility: false,
+  historyBlockVisibility: false,
   totalNumberOfPages: null,
   currentPage: 1,
   searchInputValue: '',
@@ -59,6 +61,7 @@ export default function searchReducer(state = initialState, action) {
         loadingBlockVisibility: false,
         defaultBlockVisibility: false,
         emptyBlockVisibility: false,
+        historyBlockVisibility: false,
         saveBtnDisabled: false,
         totalNumberOfPages: action.totalNumberOfPages,
         currentPage: action.currentPage,
@@ -96,6 +99,11 @@ export default function searchReducer(state = initialState, action) {
       return {
         ...state,
         queryArray: action.storage,
+      };
+    case TOGGLE_HISTORY_BLOCK_VISIBILITY:
+      return {
+        ...state,
+        historyBlockVisibility: action.state,
       };
     default:
       return state;

@@ -76,7 +76,29 @@
         height: 100%;
       }
       @include large {
-        display: none;
+        margin: 0;
+        padding: 0;
+        &.visible {
+          .saved-queries {
+            transform: translate(-300px, 0);
+          }
+          .mask {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+      }
+      .mask {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba($black-color, 0.5);
+        z-index: 4;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.4s;
       }
       .saved-queries {
         position: sticky;
@@ -84,6 +106,19 @@
         max-height: calc(100vh - 255px);
         overflow: auto;
         padding: 0 20px 20px 20px;
+        @include large {
+          position: fixed;
+          top: 0;
+          right: -300px;
+          bottom: 0;
+          width: 300px;
+          margin: 0;
+          z-index: 4;
+          transition: 0.4s;
+          max-height: 100vh;
+          padding: 0 20px 100px 20px;
+          z-index: 5;
+        }
         .historyListHeader {
           position: sticky;
           top: 0;
@@ -99,6 +134,17 @@
           }
         }
       }
+    }
+  }
+
+  .open-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(245, 0, 87, 0.1);
+    @include large {
+      display: block;
     }
   }
 }

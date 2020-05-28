@@ -1,3 +1,6 @@
+@import '../../styles/vars.scss';
+@import '../../styles/mixins.scss';
+
 .DefaultHistoryBlock {
   span {
     display: block;
@@ -6,15 +9,24 @@
     &:first-of-type {
       font-weight: bold;
       font-size: 45px;
-      margin: 20px 0 0 0;
+      margin: 20px 0 10px 0;
+      @include tablet {
+        font-size: 40px;
+      }
     }
     &:nth-of-type(2) {
       font-weight: bold;
       font-size: 40px;
+      @include tablet {
+        font-size: 35px;
+      }
     }
     &:nth-of-type(3) {
       font-weight: bold;
       font-size: 35px;
+      @include tablet {
+        font-size: 30px;
+      }
     }
   }
 }

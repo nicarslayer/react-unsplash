@@ -6,8 +6,9 @@ import ImgList from '../components/ImgList/ImgList';
 import Pagination from '../components/UI/Pagination/Pagination';
 import HistoryList from '../components/HistoryList/HistoryList';
 import DefaultHistoryBlock from '../components/DefaultHistoryBlock/DefaultHistoryBlock';
-import { Grid, Paper, Button, TextField } from '@material-ui/core';
+import { Grid, Paper, Button, TextField, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { connect } from 'react-redux';
 import {
   searchInputValidation,
@@ -17,7 +18,9 @@ import {
   fetchFromSavedRequests,
   resetSavedQueries,
   fetchLocalStorage,
+  fetchHistoryBlockVisibility,
 } from '../state/actions/search';
+import clsx from 'clsx';
 
 class App extends Component {
   componentDidMount() {
@@ -104,8 +107,22 @@ class App extends Component {
             )}
           </div>
 
-          <div className="saved-queries-container">
+          <IconButton
+            color="secondary"
+            className="open-btn"
+            onClick={this.props.fetchHistoryBlockVisibility}
+          >
+            <DescriptionIcon />
+          </IconButton>
+
+          <div
+            className={clsx(
+              'saved-queries-container',
+              this.props.historyBlockVisibility ? 'visible' : null
+            )}
+          >
             <div>
+              <div className="mask" onClick={this.props.fetchHistoryBlockVisibility}></div>
               <Paper className="saved-queries">
                 {this.props.queryArray.length > 0 ? (
                   <React.Fragment>
@@ -143,6 +160,7 @@ function mapStateToProps(state) {
     loadingBlockVisibility: state.loadingBlockVisibility,
     defaultBlockVisibility: state.defaultBlockVisibility,
     emptyBlockVisibility: state.emptyBlockVisibility,
+    historyBlockVisibility: state.historyBlockVisibility,
     totalNumberOfPages: state.totalNumberOfPages,
     currentPage: state.currentPage,
     searchInputValue: state.searchInputValue,
@@ -165,6 +183,7 @@ function mapDispatchToProps(dispatch) {
     fetchFromSavedRequests: (event) => dispatch(fetchFromSavedRequests(event)),
     resetSavedQueries: () => dispatch(resetSavedQueries()),
     fetchLocalStorage: (storage) => dispatch(fetchLocalStorage(storage)),
+    fetchHistoryBlockVisibility: () => dispatch(fetchHistoryBlockVisibility()),
   };
 }
 
