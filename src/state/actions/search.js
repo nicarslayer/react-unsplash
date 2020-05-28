@@ -102,8 +102,8 @@ export function addSavedQuery(currentQuery) {
 
 export function saveQuery() {
   return (dispatch, getState) => {
-    const [currentQuery] = getState().currentQuery;
-    const [queryArray] = getState().queryArray;
+    const currentQuery = getState().currentQuery;
+    const queryArray = getState().queryArray;
 
     if (queryArray.length !== 0) {
       for (let i = 0; i < queryArray.length; i += 1) {
