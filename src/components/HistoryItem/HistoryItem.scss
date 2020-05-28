@@ -1,0 +1,6 @@
+.MuiButtonBase-root {
+  border-bottom: 1px solid #ccc !important;
+  &:last-of-type {
+    border: none !important;
+  }
+}

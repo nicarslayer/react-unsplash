@@ -4,16 +4,11 @@ import Input from '../Input/Input';
 import Button from '../Button/Button';
 
 const Pagination = (props) =>
-  props.pages !== 0 ? (
+  props.emptyBlockVisibility ? null : (
     <div className="Pagination">
       <span>Page</span>
       <form>
-        <Input
-          type="text"
-          defaultValue={props.currentPage}
-          onChange={props.onChange}
-          onKeyPress={props.onKeyPress}
-        />
+        <Input type="text" defaultValue={props.currentPage} onChange={props.onChange} />
         <Button type="primary" onClick={props.onClick} disabled={props.disabled}>
           Go
         </Button>
@@ -23,5 +18,5 @@ const Pagination = (props) =>
         {props.pages}
       </div>
     </div>
-  ) : null;
+  );
 export default Pagination;

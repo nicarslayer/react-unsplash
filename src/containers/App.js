@@ -4,83 +4,33 @@ import Loader from '../components/UI/Loader/Loader';
 import DefaultBlock from '../components/DefaultBlock/DefaultBlock';
 import ImgList from '../components/ImgList/ImgList';
 import Pagination from '../components/UI/Pagination/Pagination';
-import { Grid, Button, TextField } from '@material-ui/core';
-import dataFetching from '../utils/dataFetching';
+import HistoryList from '../components/HistoryList/HistoryList';
+import DefaultHistoryBlock from '../components/DefaultHistoryBlock/DefaultHistoryBlock';
+import { Grid, Paper, Button, TextField } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { connect } from 'react-redux';
+import {
+  searchInputValidation,
+  fetchSearchResponse,
+  paginationInputValidation,
+  saveQuery,
+  fetchFromSavedRequests,
+  resetSavedQueries,
+  fetchLocalStorage,
+} from '../state/actions/search';
 
-export default class App extends Component {
-  state = {
-    images: [],
-    loadingBlockVisibility: false,
-    defaultBlockVisibility: true,
-    totalNumberOfPages: null,
-    currentPage: 1,
-    searchBtnDisabled: true,
-    paginationBtnDisabled: false,
-  };
-
-  searchInputHandler = (event) => {
-    if (event.target.value.trim() !== '') {
-      this.setState({
-        request: event.target.value,
-        currentPage: 1,
-        searchBtnDisabled: false,
-      });
-    } else {
-      this.setState({
-        searchBtnDisabled: true,
-      });
-    }
-  };
-
-  searchHandler = (event) => {
-    event.preventDefault();
-
-    const currentPage = this.state.currentPage;
-    const images = [];
-    const request = this.state.request;
-    const clientId = '&client_id=T47LHJDjEujXoOF7KrTXcP9CLns2zW3BARnsoMA4fDs';
-
-    dataFetching(currentPage, request, clientId).then((response) => {
-      Object.keys(response.results).map((key, index) => {
-        return images.push({
-          id: key,
-          title: response.results[index].description,
-          urls: response.results[index].urls.regular,
-          userName: response.results[index].user.name,
-          userPhoto: response.results[index].user.profile_image.large,
-          date: response.results[index].created_at.split('T')[0],
-        });
-      });
-      window.scrollTo(0, 0);
-      this.setState({
-        images,
-        loadingBlockVisibility: false,
-        defaultBlockVisibility: false,
-        totalNumberOfPages: response.total_pages,
-      });
-    });
-  };
-
-  paginationHandler = (event) => {
-    if (isNaN(event.target.value) || event.target.value === '' || event.target.value < 1) {
-      event.target.value = '';
-      this.setState({
-        paginationBtnDisabled: true,
-      });
-    } else {
-      const inputVal = +event.target.value;
-      const maxValue = this.state.totalNumberOfPages;
-
-      if (inputVal > maxValue) {
-        event.target.value = maxValue;
+class App extends Component {
+  componentDidMount() {
+    try {
+      const serializedState = localStorage.getItem('initialState');
+      if (serializedState === null) {
+        return undefined;
       }
-
-      this.setState({
-        currentPage: event.target.value,
-        paginationBtnDisabled: false,
-      });
+      return this.props.fetchLocalStorage(JSON.parse(serializedState));
+    } catch (err) {
+      return undefined;
     }
-  };
+  }
 
   render() {
     return (
@@ -88,57 +38,97 @@ export default class App extends Component {
         <Grid
           className="search-form"
           component="form"
-          onSubmit={this.searchHandler}
+          onSubmit={(event) => this.props.fetchSearchResponse(event, this.props.request, 1)}
           container
-          required
         >
-          <div className="input-container">
-            <TextField
-              label="Search free high-resolution photos"
-              variant="outlined"
-              onChange={this.searchInputHandler}
-              required
-            />
-          </div>
+          <Grid item xs={12}>
+            <Paper>
+              <div className="input-container">
+                <TextField
+                  label="Search free high-resolution photos"
+                  value={this.props.searchInputValue}
+                  variant="outlined"
+                  onChange={(event) => this.props.searchInputValidation(event)}
+                  required
+                />
+              </div>
+              <div className="buttons-group">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(event) => this.props.fetchSearchResponse(event, this.props.request, 1)}
+                  disabled={this.props.searchBtnDisabled}
+                >
+                  Search
+                </Button>
 
-          <div className="buttons-group">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={this.searchHandler}
-              disabled={this.state.searchBtnDisabled}
-            >
-              Search
-            </Button>
-            <Button variant="contained" color="secondary" disabled>
-              Save
-            </Button>
-          </div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.props.saveQuery}
+                  disabled={this.props.saveBtnDisabled}
+                >
+                  Save
+                </Button>
+              </div>
+            </Paper>
+          </Grid>
         </Grid>
         <div className="row">
           <div className="content-box">
-            {this.state.defaultBlockVisibility ? (
+            {this.props.defaultBlockVisibility ? (
               <DefaultBlock />
-            ) : this.state.loadingBlockVisibility ? (
+            ) : this.props.loadingBlockVisibility ? (
               <Loader />
             ) : (
               <React.Fragment>
-                <ImgList images={this.state.images} />
+                <ImgList
+                  images={this.props.images}
+                  emptyBlockVisibility={this.props.emptyBlockVisibility}
+                />
                 <Pagination
-                  pages={this.state.totalNumberOfPages}
-                  disabled={this.state.paginationBtnDisabled}
-                  currentPage={this.state.currentPage}
-                  onChange={this.paginationHandler}
-                  onClick={this.searchHandler}
+                  pages={this.props.totalNumberOfPages}
+                  emptyBlockVisibility={this.props.emptyBlockVisibility}
+                  disabled={this.props.paginationBtnDisabled}
+                  currentPage={this.props.currentPage}
+                  onChange={(event) => this.props.paginationInputValidation(event)}
+                  onClick={(event) =>
+                    this.props.fetchSearchResponse(
+                      event,
+                      this.props.request,
+                      this.props.currentPage
+                    )
+                  }
                 />
               </React.Fragment>
             )}
           </div>
+
           <div className="saved-queries-container">
-            <div className="saved-queries">
-              <span>Here</span>
-              <span>will be</span>
-              <span>your search history</span>
+            <div>
+              <Paper className="saved-queries">
+                {this.props.queryArray.length > 0 ? (
+                  <React.Fragment>
+                    <div className="historyListHeader">
+                      <div className="title">Search history:</div>
+                      <Button
+                        variant="contained"
+                        color="default"
+                        startIcon={<DeleteIcon />}
+                        onClick={this.props.resetSavedQueries}
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                    <HistoryList
+                      queryArray={this.props.queryArray}
+                      onClick={(event) => this.props.fetchFromSavedRequests(event)}
+                    />
+                  </React.Fragment>
+                ) : (
+                  <DefaultHistoryBlock />
+                )}
+              </Paper>
             </div>
           </div>
         </div>
@@ -146,3 +136,36 @@ export default class App extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    images: state.images,
+    loadingBlockVisibility: state.loadingBlockVisibility,
+    defaultBlockVisibility: state.defaultBlockVisibility,
+    emptyBlockVisibility: state.emptyBlockVisibility,
+    totalNumberOfPages: state.totalNumberOfPages,
+    currentPage: state.currentPage,
+    searchInputValue: state.searchInputValue,
+    searchBtnDisabled: state.searchBtnDisabled,
+    saveBtnDisabled: state.saveBtnDisabled,
+    paginationBtnDisabled: state.paginationBtnDisabled,
+    request: state.request,
+    currentQuery: state.currentQuery,
+    queryArray: state.queryArray,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    searchInputValidation: (event) => dispatch(searchInputValidation(event)),
+    fetchSearchResponse: (event, request, currentPage) =>
+      dispatch(fetchSearchResponse(event, request, currentPage)),
+    paginationInputValidation: (event) => dispatch(paginationInputValidation(event)),
+    saveQuery: () => dispatch(saveQuery()),
+    fetchFromSavedRequests: (event) => dispatch(fetchFromSavedRequests(event)),
+    resetSavedQueries: () => dispatch(resetSavedQueries()),
+    fetchLocalStorage: (storage) => dispatch(fetchLocalStorage(storage)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

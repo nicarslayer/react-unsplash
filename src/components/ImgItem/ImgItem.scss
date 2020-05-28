@@ -2,11 +2,9 @@
 @import '../../styles/mixins.scss';
 
 .Img-item {
-  width: calc(50% - 20px);
-  border-radius: 5px;
-  margin: 10px;
-  @include mobile {
-    width: calc(100% - 20px);
+  padding: 10px;
+  .MuiPaper-root {
+    height: 100%;
   }
   .MuiCardMedia-root {
     padding: 0 0 140% 0;
